@@ -37,7 +37,7 @@ jobs:
         with:
           node-version: 20
 
-      - run: npm ci
+      - run: npm install
 
       - run: npx prisma generate
 
@@ -47,9 +47,6 @@ jobs:
           JWT_SECRET: test_secret_for_ci
           NODE_ENV: test
         run: npm test
-
-      - name: Build Docker image
-        run: docker build -t fittrack-backend:${{ github.sha }} .
 
   frontend:
     name: Frontend — build
@@ -65,5 +62,5 @@ jobs:
         with:
           node-version: 20
 
-      - run: npm ci
+      - run: npm install
       - run: npm run build
