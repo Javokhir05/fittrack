@@ -38,4 +38,11 @@ app.use('/api/v1/users', userRouter);
 app.use(notFound);
 app.use(errorHandler);
 
+app.get("/", (req, res) => {
+  res.json({
+    message: "FitTrack API is running 🚀",
+    status: "ok"
+  });
+});
+
 module.exports = app;
