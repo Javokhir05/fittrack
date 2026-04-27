@@ -1,24 +1,18 @@
-FROM node:20-alpine AS base
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci --only=production
+FROM node:20-alpine
 
-FROM base AS builder
-RUN npm ci
+WORKDIR /app
+
+RUN apk add --no-cache openssl openssl-dev
+
+COPY package*.json ./
+RUN npm install
+
 COPY . .
 RUN npx prisma generate
 
-FROM node:20-alpine AS runner
-WORKDIR /app
-ENV NODE_ENV=production
-
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/src ./src
-COPY --from=builder /app/prisma ./prisma
-COPY package.json .
-
 EXPOSE 3000
+
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s \
   CMD wget -qO- http://localhost:3000/health || exit 1
 
-CMD ["node", "src/app.js"]
+CMD ["sh", "-c", "npx prisma migrate deploy && npx prisma db seed && node src/app.js"]
