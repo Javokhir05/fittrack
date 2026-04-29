@@ -50,7 +50,6 @@ export default function LoginPage() {
         </form>
         <p className="auth-footer">No account? <Link to="/register">Register</Link></p>
         <div className="demo-creds">
-          <p><strong>Demo:</strong> admin@fittrack.com / Admin1234!</p>
           <p>user@fittrack.com / User1234!</p>
         </div>
       </div>

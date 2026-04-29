@@ -50,3 +50,4 @@ export const api = {
     updateRole: (id, role) => request('PATCH', `/users/${id}/role`, { role }),
   },
 };
+
