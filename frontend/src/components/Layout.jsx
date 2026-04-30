@@ -1,41 +1,57 @@
-import { Outlet, NavLink, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import './Layout.css';
 
 export default function Layout() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // Close sidebar on route change (mobile)
+  useEffect(() => {
+    setSidebarOpen(false);
+  }, [location.pathname]);
 
   function handleLogout() {
     logout();
     navigate('/login');
   }
 
+  const navItems = [
+    { to: '/dashboard', icon: '📊', label: 'Dashboard' },
+    { to: '/workouts', icon: '🏋️', label: 'Workouts' },
+    { to: '/exercises', icon: '💪', label: 'Exercises' },
+    { to: '/progress', icon: '📈', label: 'Progress' },
+    ...(user?.role === 'ADMIN' ? [{ to: '/admin', icon: '🔧', label: 'Admin' }] : []),
+  ];
+
   return (
     <div className="layout">
-      <aside className="sidebar">
+      {/* Mobile overlay */}
+      {sidebarOpen && (
+        <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} />
+      )}
+
+      {/* Sidebar */}
+      <aside className={`sidebar ${sidebarOpen ? 'sidebar-open' : ''}`}>
         <div className="sidebar-logo">
           <span className="logo-icon">⚡</span>
           <span className="logo-text">FitTrack</span>
+          <button className="sidebar-close" onClick={() => setSidebarOpen(false)}>✕</button>
         </div>
         <nav className="sidebar-nav">
-          <NavLink to="/dashboard" className={({isActive}) => isActive ? 'nav-item active' : 'nav-item'}>
-            📊 Dashboard
-          </NavLink>
-          <NavLink to="/workouts" className={({isActive}) => isActive ? 'nav-item active' : 'nav-item'}>
-            🏋️ Workouts
-          </NavLink>
-          <NavLink to="/exercises" className={({isActive}) => isActive ? 'nav-item active' : 'nav-item'}>
-            💪 Exercises
-          </NavLink>
-          <NavLink to="/progress" className={({isActive}) => isActive ? 'nav-item active' : 'nav-item'}>
-            📈 Progress
-          </NavLink>
-          {user?.role === 'ADMIN' && (
-            <NavLink to="/admin" className={({isActive}) => isActive ? 'nav-item active' : 'nav-item'}>
-              🔧 Admin
+          {navItems.map(item => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}
+            >
+              <span className="nav-icon">{item.icon}</span>
+              <span>{item.label}</span>
             </NavLink>
-          )}
+          ))}
         </nav>
         <div className="sidebar-footer">
           <div className="user-info">
@@ -45,9 +61,22 @@ export default function Layout() {
           <button className="btn btn-ghost" onClick={handleLogout}>Logout</button>
         </div>
       </aside>
-      <main className="main-content">
-        <Outlet />
-      </main>
+
+      {/* Main content */}
+      <div className="main-wrapper">
+        {/* Mobile top bar */}
+        <header className="mobile-header">
+          <button className="hamburger" onClick={() => setSidebarOpen(true)}>
+            <span /><span /><span />
+          </button>
+          <span className="mobile-logo">⚡ FitTrack</span>
+          <span className={`badge badge-${user?.role?.toLowerCase()}`}>{user?.role}</span>
+        </header>
+
+        <main className="main-content">
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 }
