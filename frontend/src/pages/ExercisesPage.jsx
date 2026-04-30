@@ -145,10 +145,10 @@ export default function ExercisesPage() {
                         onClick={() => startEdit(ex)}
                         style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}
                       >
-                        ✏️ Edit
+                        Edit
                       </button>
                       <button className="btn btn-danger" onClick={() => handleDelete(ex.id)}>
-                        🗑️ Delete
+                        Delete
                       </button>
                     </div>
                   </td>
