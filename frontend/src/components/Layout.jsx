@@ -37,8 +37,7 @@ export default function Layout() {
       {/* Sidebar */}
       <aside className={`sidebar ${sidebarOpen ? 'sidebar-open' : ''}`}>
         <div className="sidebar-logo">
-          <span className="logo-icon">⚡</span>
-          <span className="logo-text">FitTrack</span>
+          <img src="/logo.png" alt="FitTrack" className="logo-img" />
           <button className="sidebar-close" onClick={() => setSidebarOpen(false)}>✕</button>
         </div>
         <nav className="sidebar-nav">
@@ -69,7 +68,7 @@ export default function Layout() {
           <button className="hamburger" onClick={() => setSidebarOpen(true)}>
             <span /><span /><span />
           </button>
-          <span className="mobile-logo">⚡ FitTrack</span>
+          <img src="/logo.png" alt="FitTrack" className="logo-img-mobile" />
           <span className={`badge badge-${user?.role?.toLowerCase()}`}>{user?.role}</span>
         </header>
 

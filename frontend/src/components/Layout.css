@@ -192,3 +192,15 @@
     font-size: 0.85rem;
   }
 }
+/* Logo */
+.logo-img {
+  height: 36px;
+  width: auto;
+  object-fit: contain;
+}
+
+.logo-img-mobile {
+  height: 28px;
+  width: auto;
+  object-fit: contain;
+}
