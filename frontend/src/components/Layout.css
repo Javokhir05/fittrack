@@ -194,13 +194,13 @@
 }
 /* Logo */
 .logo-img {
-  height: 86px;
+  height: 106px;
   width: auto;
   object-fit: contain;
 }
 
 .logo-img-mobile {
-  height: 68px;
+  height: 48px;
   width: auto;
   object-fit: contain;
 }
