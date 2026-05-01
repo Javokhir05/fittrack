@@ -1,4 +1,4 @@
-# ⚡ FitTrack — Health & Fitness Tracker
+#  FitTrack — Health & Fitness Tracker
 
 A multi-tier web application for logging workouts, tracking body progress, and managing an exercise catalog. Built for the *Design of Multi-Tier Internet Applications* course project.
 
