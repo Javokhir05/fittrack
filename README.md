@@ -148,3 +148,6 @@ fittrack/
 ├── docker-compose.yaml
 └── .github/workflows/ci.yml
 ```
+# Author
+Name: Javokhirbek Ruziboev
+email: "roziboyevjavokhir045@gmail.com"
