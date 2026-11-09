@@ -7,6 +7,7 @@ import WorkoutsPage from './pages/WorkoutsPage';
 import ExercisesPage from './pages/ExercisesPage';
 import ProgressPage from './pages/ProgressPage';
 import AdminPage from './pages/AdminPage';
+import LandingPage from './pages/LandingPage';
 import Layout from './components/Layout';
 
 function ProtectedRoute({ children, adminOnly }) {
@@ -22,10 +23,10 @@ export default function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
+          <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
-            <Route index element={<Navigate to="/dashboard" />} />
+          <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="workouts" element={<WorkoutsPage />} />
             <Route path="exercises" element={<ExercisesPage />} />
