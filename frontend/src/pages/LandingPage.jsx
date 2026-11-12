@@ -157,7 +157,7 @@ export default function LandingPage() {
           <span className="lp-brand">⚡ FitTrack</span>
           <span className="contact-footer">
             <li><a href="https://t.me/mirzaolimov1ch">telegram</a></li>
-            <li><a href="roziboyevjavokhir045@gmail.com">email</a></li>
+            <li><a href="https://www.linkedin.com/in/javokhirbek-ruziboev-b89424306">linkedin</a></li>
           </span>
           <span className="lp-footer-note">© {new Date().getFullYear()} FitTrack. Train. Track. Improve.</span>
         </div>

@@ -148,6 +148,7 @@
   .lp-feature-grid { grid-template-columns: 1fr; }
   .lp-cta-row .btn { flex: 1 1 100%; justify-content: center; }
   .lp-window { transform: none; }
+  .lp-footer-inner {flex: 1 1 100%; justify-content: space-around;}
 }
 @media (prefers-reduced-motion: reduce) {
   .lp-feature, .lp .btn { transition: none; }
