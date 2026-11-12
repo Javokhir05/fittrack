@@ -130,6 +130,8 @@
 .lp-footer { border-top: 1px solid var(--border); padding: 1.8rem 0; }
 .lp-footer-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem; }
 .lp-footer-note { color: var(--text2); font-size: 0.85rem; }
+.contact-footer {display: flex; justify-content: space-evenly; align-items: center;flex-wrap: wrap; gap: 2.8rem;}
+.contact-footer li {text-decoration:underline; text-decoration-color: chartreuse; text-underline-offset: calc(3px);}
 
 /* ---------- Responsive ---------- */
 @media (max-width: 960px) {
