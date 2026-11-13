@@ -37,9 +37,12 @@ app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.use(express.json());
 
 // Rate limiting
+// RATE_LIMIT_MAX overrides the default. Local development is relaxed because every
+// request comes from the same address and a single page can make several API calls.
+const defaultMax = process.env.NODE_ENV === 'production' ? 300 : 2000;
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100,
+  max: Number(process.env.RATE_LIMIT_MAX) || defaultMax,
   standardHeaders: true,
   legacyHeaders: false,
 });
@@ -51,6 +54,7 @@ const authLimiter = rateLimit({
   max: 10,
   standardHeaders: true,
   legacyHeaders: false,
+  skipSuccessfulRequests: true, // only failed attempts count toward the limit
   skip: () => process.env.NODE_ENV === 'test',
   message: { status: 'error', message: 'Too many attempts, please try again later' },
 });
