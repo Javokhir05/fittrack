@@ -27,6 +27,10 @@ router.post(
   controller.login
 );
 
+// Cookie-based session endpoints (the refresh cookie is only sent to /api/v1/auth/*)
+router.post('/refresh', controller.refresh);
+router.post('/logout', controller.logout);
+
 router.get('/me', authenticate, controller.me);
 
 module.exports = router;
