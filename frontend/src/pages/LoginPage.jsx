@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import './AuthPage.css';
 
 export default function LoginPage() {
-  const { login } = useAuth();
+  const { login, sessionExpired } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
@@ -32,6 +32,9 @@ export default function LoginPage() {
           <h1>Welcome back</h1>
           <p>Sign in to your account</p>
         </div>
+        {sessionExpired && !error && (
+          <div className="info-msg">Your session has expired. Please sign in again.</div>
+        )}
         {error && <div className="error-msg">{error}</div>}
         <form onSubmit={handleSubmit}>
           <div className="form-group">

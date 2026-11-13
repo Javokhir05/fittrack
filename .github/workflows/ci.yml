@@ -8,7 +8,7 @@ on:
 
 jobs:
   backend:
-    name: Backend — lint, test, build
+    name: Backend — lint, migrate, test
     runs-on: ubuntu-latest
 
     services:
@@ -40,6 +40,14 @@ jobs:
       - run: npm install
 
       - run: npx prisma generate
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Apply migrations to a clean database
+        env:
+          DATABASE_URL: postgresql://fittrack:fittrack@localhost:5432/fittrack_test
+        run: npx prisma migrate deploy
 
       - name: Run tests
         env:

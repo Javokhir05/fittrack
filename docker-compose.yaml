@@ -23,7 +23,8 @@ services:
     environment:
       DATABASE_URL: postgresql://fittrack:fittrack@db:5432/fittrack
       JWT_SECRET: ${JWT_SECRET:-change_me_in_production}
-      JWT_EXPIRES_IN: 7d
+      COOKIE_SECURE: "false"   # compose serves plain http on localhost
+      COOKIE_SAMESITE: strict
       NODE_ENV: production
       PORT: 3000
       CORS_ORIGIN: http://localhost:5173
