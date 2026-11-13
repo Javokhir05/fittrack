@@ -17,9 +17,27 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  workouts      Workout[]
+    workouts      Workout[]
   progressEntries ProgressEntry[]
+  refreshTokens RefreshToken[]
 }
+
+// Long-lived session tokens. Only a SHA-256 hash is stored, never the raw token.
+model RefreshToken {
+  id        Int       @id @default(autoincrement())
+  tokenHash String    @unique
+  userId    Int
+  expiresAt DateTime
+  revokedAt DateTime?
+  // Set only when the token was exchanged for a new one (rotation), not on logout/theft revoke.
+  rotatedAt DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
 
 enum Role {
   USER

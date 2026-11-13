@@ -3,6 +3,7 @@ const helmet = require('helmet');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const { errorHandler, notFound } = require('../middleware/errorHandler');
+const { csrfGuard } = require('../middleware/auth');
 const healthRouter = require('../modules/health/health.router');
 const authRouter = require('../modules/auth/auth.router');
 const exerciseRouter = require('../modules/exercises/exercise.router');
@@ -12,9 +13,27 @@ const userRouter = require('../modules/users/user.router');
 
 const app = express();
 
+// Behind a reverse proxy (Railway, nginx) req.ip would otherwise be the proxy's
+// address, so every user would share one rate-limit bucket.
+// TRUST_PROXY: "true", a hop count like "1", or unset (1 in production, off elsewhere).
+function trustProxySetting() {
+  const v = process.env.TRUST_PROXY;
+  if (v === undefined || v === '') return process.env.NODE_ENV === 'production' ? 1 : false;
+  if (v === 'true') return true;
+  if (v === 'false') return false;
+  return Number.isInteger(Number(v)) ? Number(v) : v;
+}
+app.set('trust proxy', trustProxySetting());
+
 // Security middleware
 app.use(helmet());
-app.use(cors({ origin: process.env.CORS_ORIGIN || '*' }));
+// Cookies require an explicit origin (never "*") together with credentials.
+// CORS_ORIGIN may hold several comma-separated origins.
+const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:5173')
+  .split(',')
+  .map((o) => o.trim())
+  .filter(Boolean);
+app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.use(express.json());
 
 // Rate limiting
@@ -25,6 +44,21 @@ const limiter = rateLimit({
   legacyHeaders: false,
 });
 app.use('/api/', limiter);
+
+// Much stricter limit on credential endpoints to slow down password guessing.
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  skip: () => process.env.NODE_ENV === 'test',
+  message: { status: 'error', message: 'Too many attempts, please try again later' },
+});
+app.use('/api/v1/auth/login', authLimiter);
+app.use('/api/v1/auth/register', authLimiter);
+
+// CSRF protection for cookie-authenticated, state-changing requests
+app.use('/api/', csrfGuard);
 
 // Routes
 app.use('/', healthRouter);
